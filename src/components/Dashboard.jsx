@@ -207,7 +207,7 @@ const Dashboard = () => {
 
                         <div className="stat-card">
                             <div className="stat-icon info">
-                                <i className="bi bi-hourglass-split"></i>
+                                <i className="bi bi-people"></i>
                             </div>
                             <div className="stat-info">
                                 <h3>Users</h3>
