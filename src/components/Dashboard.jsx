@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './Dashboard.css';
 import Sidebar from './Sidebar';
 
@@ -55,7 +54,7 @@ const Dashboard = () => {
         new Date(task.dueDate) < today && task.status !== 'completed'
     );
 
-    const TaskTable = ({ tasks, title, isOverdue }) => (
+    const TaskTable = ({tasks, title, isOverdue}) => (
         <div className="tasks-section">
             <div className="section-header">
                 <h2>
@@ -106,10 +105,18 @@ const Dashboard = () => {
                                         <i className="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul className="dropdown-menu dropdown-menu-end">
-                                        <li><button className="dropdown-item">Edit</button></li>
-                                        <li><button className="dropdown-item">Mark Complete</button></li>
-                                        <li><hr className="dropdown-divider"/></li>
-                                        <li><button className="dropdown-item text-danger">Delete</button></li>
+                                        <li>
+                                            <button className="dropdown-item">Edit</button>
+                                        </li>
+                                        <li>
+                                            <button className="dropdown-item">Mark Complete</button>
+                                        </li>
+                                        <li>
+                                            <hr className="dropdown-divider"/>
+                                        </li>
+                                        <li>
+                                            <button className="dropdown-item text-danger">Delete</button>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
@@ -136,7 +143,7 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-layout">
-            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}/>
             <main className="dashboard-main">
                 <div className="dashboard-header">
                     <div className="mobile-brand d-md-none">
