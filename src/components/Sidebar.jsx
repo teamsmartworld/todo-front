@@ -21,7 +21,7 @@ const Sidebar = ({isOpen, onClose}) => {
                     <div className="sidebar-header">
                         <div className="logo-container">
                             <i className="bi bi-card-checklist"></i>
-                            <h4>To-do App</h4>
+                            <h4>To-do</h4>
                         </div>
                         <button className="close-sidebar d-md-none" onClick={onClose}>
                             <i className="bi bi-x-lg"></i>

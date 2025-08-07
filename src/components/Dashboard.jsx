@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './Dashboard.css';
 import Sidebar from './Sidebar';
+import Header from "./Header.jsx";
 
 const Dashboard = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -145,30 +146,12 @@ const Dashboard = () => {
         <div className="dashboard-layout">
             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}/>
             <main className="dashboard-main">
-                <div className="dashboard-header">
-                    <div className="mobile-brand d-md-none">
-                        <button className="sidebar-toggle" onClick={() => setIsSidebarOpen(true)}>
-                            <i className="bi bi-list"></i>
-                        </button>
-                        <div className="brand-content">
-                            <i className="bi bi-card-checklist"></i>
-                            <h4>To-do App</h4>
-                        </div>
-                    </div>
+                <Header
+                    title="Dashboard"
+                    subtitle="Welcome back! Here's your tasks overview"
+                    onToggleSidebar={() => setIsSidebarOpen(true)}
+                />
 
-                    <div className="header-content">
-                        <div className="header-left">
-                            <h1>Dashboard</h1>
-                            <p>Welcome back! Here's your tasks overview</p>
-                        </div>
-                        <div className="header-actions">
-                            <button className="btn btn-primary">
-                                <i className="bi bi-plus-lg me-2"></i>
-                                <span>New Task</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <div className="dashboard-content">
                     <div className="stats-grid">
