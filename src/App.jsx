@@ -1,14 +1,20 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'  // Add this line
-import Login from "./components/Login.jsx";
-import Dashboard from "./components/Dashboard.jsx";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import Task from './components/Task';
+import NotFound from "./components/NotFound.jsx";  // Import Task component
 
 function App() {
     return (
-        <>
-            <Dashboard/>
-        </>
-    )
+        <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/tasks" element={<Task />} />
+            {/* Add other routes as needed */}
+            <Route path="*" element={<NotFound />} />
+        </Routes>
+    );
 }
 
-export default App
+export default App;

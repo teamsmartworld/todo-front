@@ -1,17 +1,25 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';  // Add this import
 import './Sidebar.css';
 
 const Sidebar = ({isOpen, onClose}) => {
+    const navigate = useNavigate();  // Add this hook
+
     const navItems = [
-        {icon: "bi-grid", text: "Dashboard", active: true},
-        {icon: "bi-list-task", text: "Tasks", active: false},
-        {icon: "bi-calendar3", text: "Calendar", active: false},
-        {icon: "bi-people", text: "Teams", active: false},
-        {icon: "bi-graph-up", text: "Reports", active: false}
+        {icon: "bi-grid", text: "Dashboard", path: "/dashboard", active: true},
+        {icon: "bi-list-task", text: "Tasks", path: "/dashboard/tasks", active: false},
+        {icon: "bi-calendar3", text: "Calendar", path: "/dashboard/calendar", active: false},
+        {icon: "bi-people", text: "Teams", path: "/dashboard/teams", active: false},
+        {icon: "bi-graph-up", text: "Reports", path: "/dashboard/reports", active: false}
     ];
 
     const [name, setName] = useState('User Name');
     const [email, setEmail] = useState('user.email@test.se');
+
+    const handleNavigation = (path) => {
+        navigate(path);
+        onClose(); // Close sidebar on mobile after navigation
+    };
 
     return (
         <>
@@ -30,7 +38,12 @@ const Sidebar = ({isOpen, onClose}) => {
 
                     <nav className="sidebar-nav">
                         {navItems.map((item, index) => (
-                            <div key={index} className={`nav-item ${item.active ? 'active' : ''}`}>
+                            <div
+                                key={index}
+                                className={`nav-item ${item.active ? 'active' : ''}`}
+                                onClick={() => handleNavigation(item.path)}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 <i className={`bi ${item.icon}`}></i>
                                 <span>{item.text}</span>
                             </div>
@@ -47,7 +60,7 @@ const Sidebar = ({isOpen, onClose}) => {
                                 <p>{email}</p>
                             </div>
                         </div>
-                        <button className="logout-btn">
+                        <button className="logout-btn" onClick={() => navigate('/login')}>
                             <i className="bi bi-box-arrow-right"></i>
                             <span>Logout</span>
                         </button>
