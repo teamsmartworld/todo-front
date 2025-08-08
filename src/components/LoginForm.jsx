@@ -1,12 +1,15 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginForm.css';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [formData, setFormData] = useState({
-        email: '',
+        username: '',
         password: ''
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +20,7 @@ const LoginForm = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
-        setError(''); // Clear error when user types
+        setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -26,19 +29,10 @@ const LoginForm = () => {
         setError('');
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Simple validation
-            if (formData.email === 'admin@example.se' && formData.password === 'password') {
-                // Simulate storing auth token
-                localStorage.setItem('isAuthenticated', 'true');
-                navigate('/dashboard');
-            } else {
-                setError('Invalid email or password');
-            }
+            await login(formData.username, formData.password);
+            navigate('/dashboard');
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            setError(err.message || 'An error occurred. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -68,16 +62,16 @@ const LoginForm = () => {
 
                 <form onSubmit={handleSubmit} className="login-form">
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="username">Username</label>
                         <div className="input-group">
-                            <i className="bi bi-envelope input-icon"></i>
+                            <i className="bi bi-person input-icon"></i>
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
+                                type="text"
+                                id="username"
+                                name="username"
                                 className="form-input"
-                                placeholder="Enter your email"
-                                value={formData.email}
+                                placeholder="Enter your username"
+                                value={formData.username}
                                 onChange={handleInputChange}
                                 required
                                 disabled={isLoading}

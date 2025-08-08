@@ -1,25 +1,65 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Add this import
+
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Sidebar = ({isOpen, onClose}) => {
-    const navigate = useNavigate();  // Add this hook
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { user, logout, hasRole } = useAuth();
 
     const navItems = [
-        {icon: "bi-grid", text: "Dashboard", path: "/dashboard", active: true},
-        {icon: "bi-list-task", text: "Tasks", path: "/dashboard/tasks", active: false},
-        {icon: "bi-calendar3", text: "Calendar", path: "/dashboard/calendar", active: false},
-        {icon: "bi-people", text: "Teams", path: "/dashboard/teams", active: false},
-        {icon: "bi-graph-up", text: "Reports", path: "/dashboard/reports", active: false}
+        {
+            icon: "bi-grid",
+            text: "Dashboard",
+            path: "/dashboard",
+            roles: ['ROLE_ADMIN'] // Only show for admin
+        },
+        {
+            icon: "bi-list-task",
+            text: "Tasks",
+            path: "/dashboard/tasks",
+            roles: ['ROLE_USER', 'ROLE_ADMIN'] // Show for both user and admin
+        },
+        {
+            icon: "bi-calendar3",
+            text: "Calendar",
+            path: "/dashboard/calendar",
+            roles: ['ROLE_USER', 'ROLE_ADMIN']
+        },
+        {
+            icon: "bi-people",
+            text: "Teams",
+            path: "/dashboard/teams",
+            roles: ['ROLE_ADMIN'] // Only show for admin
+        },
+        {
+            icon: "bi-graph-up",
+            text: "Reports",
+            path: "/dashboard/reports",
+            roles: ['ROLE_ADMIN'] // Only show for admin
+        }
     ];
-
-    const [name, setName] = useState('User Name');
-    const [email, setEmail] = useState('user.email@test.se');
 
     const handleNavigation = (path) => {
         navigate(path);
-        onClose(); // Close sidebar on mobile after navigation
+        onClose();
     };
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
+    // Filter navigation items based on user roles
+    const filteredNavItems = navItems.filter(item =>
+        item.roles.some(role => hasRole(role))
+    );
 
     return (
         <>
@@ -37,10 +77,10 @@ const Sidebar = ({isOpen, onClose}) => {
                     </div>
 
                     <nav className="sidebar-nav">
-                        {navItems.map((item, index) => (
+                        {filteredNavItems.map((item, index) => (
                             <div
                                 key={index}
-                                className={`nav-item ${item.active ? 'active' : ''}`}
+                                className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
                                 onClick={() => handleNavigation(item.path)}
                                 style={{ cursor: 'pointer' }}
                             >
@@ -56,11 +96,11 @@ const Sidebar = ({isOpen, onClose}) => {
                                 <i className="bi bi-person"></i>
                             </div>
                             <div className="user-info">
-                                <h5>{name}</h5>
-                                <p>{email}</p>
+                                <h5>{user?.name || 'User'}</h5>
+                                <p>{user?.email || ''}</p>
                             </div>
                         </div>
-                        <button className="logout-btn" onClick={() => navigate('/login')}>
+                        <button className="logout-btn" onClick={handleLogout}>
                             <i className="bi bi-box-arrow-right"></i>
                             <span>Logout</span>
                         </button>
