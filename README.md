@@ -2,7 +2,7 @@
 
 ### Requirements
 
-- Node.js
+- Node.js 20+
 
 - IDE (e.g., VSCode)
 
