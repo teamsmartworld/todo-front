@@ -8,8 +8,7 @@
 
 ### Steps
 
-1. Fork and clone the frontend repository: ToDo Front
-   (https://github.com/mehrdad-javan/todo-front)
+1. Fork and clone the frontend repository: [ToDo Front](https://github.com/mehrdad-javan/todo-front)
 
 2. Run the React frontend.
 
@@ -19,15 +18,15 @@
 
 ### 📝 Task Management
 
-- Finish Task.jsx (UI + logic).
+- Finish `Task.jsx` (UI + logic).
 
 - Implement taskService.js with API calls.
 
 - Ensure state updates correctly after API calls.
 
-### 👥 User Management (Admin Only)
+### 👥 User Management (Optional)
 
-- Create User.jsx component.
+- Create `User.jsx` component.
 
 - Add API calls for managing users.
 
