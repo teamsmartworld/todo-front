@@ -1,12 +1,42 @@
-# React + Vite
+## 💻 Frontend Setup
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Requirements
 
-Currently, two official plugins are available:
+- Node.js
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- IDE (e.g., VSCode)
 
-## Expanding the ESLint configuration
+### Steps
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Fork and clone the frontend repository: ToDo Front
+   (https://github.com/mehrdad-javan/todo-front)
+
+2. Run the React frontend.
+
+3. Check existing routes, navigation, and context setup.
+
+## ✅ Tasks to Complete
+
+### 📝 Task Management
+
+- Finish Task.jsx (UI + logic).
+
+- Implement taskService.js with API calls.
+
+- Ensure state updates correctly after API calls.
+
+### 👥 User Management (Admin Only)
+
+- Create User.jsx component.
+
+- Add API calls for managing users.
+
+- Restrict access to Users menu for admin role only.
+
+### 📊 Dashboard (Optional)
+
+- Implement APIs needed for dashboard.
+
+- Complete dashboard UI and logic.
+
+- Add extra features to enhance usability.
