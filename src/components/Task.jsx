@@ -16,6 +16,8 @@ const Task = () => {
         assignedPersonId: ''
     });
     const [isOffline, setIsOffline] = useState(false);
+    const [editingTask, setEditingTask] = useState(null);
+    const [editFormData, setEditFormData] = useState({});
 
     useEffect(() => {
         fetchTasks();
@@ -80,6 +82,37 @@ const Task = () => {
             console.error('Error toggling task status:', error);
             fetchTasks();
         }
+    };
+
+    const handleEdit = (task) => {
+        setEditingTask(task.id);
+        setEditFormData({
+            title: task.title,
+            description: task.description,
+            dueDate: task.dueDate || '',
+            assignedPersonId: task.assignedPersonId || ''
+        });
+    };
+
+    const handleSaveEdit = async (id) => {
+        try {
+            const updatedTask = await taskService.updateTask(id, editFormData);
+            setTasks(prev => prev.map(task => 
+                task.id === id ? updatedTask : task
+            ));
+            setEditingTask(null);
+        } catch (error) {
+            console.error('Error updating task:', error);
+            setTasks(prev => prev.map(task => 
+                task.id === id ? { ...task, ...editFormData } : task
+            ));
+            setEditingTask(null);
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditingTask(null);
+        setEditFormData({});
     };
 
     return (
@@ -192,13 +225,49 @@ const Task = () => {
                                             ) : (
                                                 tasks.map(task => (
                                                     <div key={task.id} className="list-group-item list-group-item-action">
-                                                        <div className="d-flex w-100 justify-content-between align-items-start">
-                                                            <div className="flex-grow-1">
-                                                                <div className="d-flex justify-content-between">
-                                                                    <h6 className="mb-1">{task.title}</h6>
-                                                                    <small className="text-muted ms-2">Created: {new Date(task.createdAt).toLocaleDateString()}</small>
+                                                        {editingTask === task.id ? (
+                                                            <div className="edit-form">
+                                                                <div className="mb-2">
+                                                                    <input 
+                                                                        type="text" 
+                                                                        className="form-control form-control-sm" 
+                                                                        value={editFormData.title}
+                                                                        onChange={(e) => setEditFormData({...editFormData, title: e.target.value})}
+                                                                        placeholder="Task title"
+                                                                    />
                                                                 </div>
-                                                                <p className="mb-1 text-muted small">{task.description}</p>
+                                                                <div className="mb-2">
+                                                                    <textarea 
+                                                                        className="form-control form-control-sm" 
+                                                                        rows="2"
+                                                                        value={editFormData.description}
+                                                                        onChange={(e) => setEditFormData({...editFormData, description: e.target.value})}
+                                                                        placeholder="Description"
+                                                                    ></textarea>
+                                                                </div>
+                                                                <div className="d-flex gap-2">
+                                                                    <button 
+                                                                        className="btn btn-success btn-sm" 
+                                                                        onClick={() => handleSaveEdit(task.id)}
+                                                                    >
+                                                                        <i className="bi bi-check"></i> Save
+                                                                    </button>
+                                                                    <button 
+                                                                        className="btn btn-secondary btn-sm" 
+                                                                        onClick={handleCancelEdit}
+                                                                    >
+                                                                        <i className="bi bi-x"></i> Cancel
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="d-flex w-100 justify-content-between align-items-start">
+                                                                <div className="flex-grow-1">
+                                                                    <div className="d-flex justify-content-between">
+                                                                        <h6 className="mb-1">{task.title}</h6>
+                                                                        <small className="text-muted ms-2">Created: {new Date(task.createdAt).toLocaleDateString()}</small>
+                                                                    </div>
+                                                                    <p className="mb-1 text-muted small">{task.description}</p>
                                                                 <div className="d-flex align-items-center flex-wrap">
                                                                     {task.dueDate && (
                                                                         <small className="text-muted me-2">
@@ -226,7 +295,11 @@ const Task = () => {
                                                                 >
                                                                     <i className="bi bi-check-lg"></i>
                                                                 </button>
-                                                                <button className="btn btn-outline-primary btn-sm" title="Edit">
+                                                                <button 
+                                                                    className="btn btn-outline-primary btn-sm" 
+                                                                    title="Edit"
+                                                                    onClick={() => handleEdit(task)}
+                                                                >
                                                                     <i className="bi bi-pencil"></i>
                                                                 </button>
                                                                 <button 
@@ -236,8 +309,9 @@ const Task = () => {
                                                                 >
                                                                     <i className="bi bi-trash"></i>
                                                                 </button>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        )}
                                                     </div>
                                                 ))
                                             )}
