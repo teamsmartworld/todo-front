@@ -15,6 +15,7 @@ const Task = () => {
         dueDate: '',
         assignedPersonId: ''
     });
+    const [isOffline, setIsOffline] = useState(false);
 
     useEffect(() => {
         fetchTasks();
@@ -35,11 +36,22 @@ const Task = () => {
         e.preventDefault();
         try {
             const newTask = await taskService.createTask(formData);
+            console.log('Created task:', newTask);
             setTasks(prev => [...prev, newTask]);
             setFormData({ title: '', description: '', dueDate: '', assignedPersonId: '' });
         } catch (error) {
             console.error('Error creating task:', error);
-            fetchTasks();
+            setIsOffline(true);
+            // Fallback: add task locally with temporary ID
+            const tempTask = {
+                id: Date.now(),
+                ...formData,
+                status: 'PENDING',
+                createdAt: new Date().toISOString(),
+                isLocal: true // Mark as local-only
+            };
+            setTasks(prev => [...prev, tempTask]);
+            setFormData({ title: '', description: '', dueDate: '', assignedPersonId: '' });
         }
     };
 
@@ -174,6 +186,7 @@ const Task = () => {
                                         </div>
                                     ) : (
                                         <div className="list-group">
+                                            {console.log('Current tasks:', tasks)}
                                             {tasks.length === 0 ? (
                                                 <p className="text-muted text-center">No tasks found. Create your first task above!</p>
                                             ) : (
